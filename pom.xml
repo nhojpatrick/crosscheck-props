@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project
+   xmlns="http://maven.apache.org/POM/4.0.0"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
+   <!--parent /-->
+   <modelVersion>4.0.0</modelVersion>
+   <groupId>com.github.nhojpatrick</groupId>
+   <artifactId>crosscheck-props</artifactId>
+   <packaging>jar</packaging>
+   <name>nhojpatrick, crosscheck properties</name>
+   <version>0.1</version>
+   <description>nhojpatrick, crosscheck properties project.</description>
+   <url>http://wiki.github.com/nhojpatrick/${project.artifactId}/</url>
+   <!--prerequisites /-->
+   <issueManagement>
+      <system>GITHUB</system>
+      <url>http://github.com/nhojpatrick/${project.artifactId}/issues/</url>
+   </issueManagement>
+   <!--ciManagement /-->
+   <inceptionYear>2010</inceptionYear>
+   <!--mailingLists /-->
+   <developers>
+      <developer>
+         <id>nhojpatrick</id>
+         <name>John Patrick</name>
+         <url>http://github.com/nhojpatrick/</url>
+      </developer>
+   </developers>
+   <!--contributors /-->
+   <!--licenses /-->
+   <scm>
+      <connection>scm:git:http://github.com/nhojpatrick/${project.artifactId}.git</connection>
+      <developerConnection>scm:git:git@github.com:nhojpatrick/${project.artifactId}.git</developerConnection>
+      <tag>HEAD</tag>
+      <url>http://github.com/nhojpatrick/${project.artifactId}/</url>
+   </scm>
+   <!--organization /-->
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>${project.mvn.plugins.compiler.version}</version>
+            <configuration>
+               <source>${project.java.source}</source>
+               <target>${project.java.target}</target>
+            </configuration>
+         </plugin>
+         <plugin>
+         	<groupId>org.apache.maven.plugins</groupId>
+         	<artifactId>maven-eclipse-plugin</artifactId>
+         	<version>2.7</version>
+         </plugin>
+      </plugins>
+   </build>
+   <!--profiles /-->
+   <!--modules /-->
+   <!--repositories /-->
+   <!--pluginRepositories /-->
+   <dependencies>
+      <dependency>
+         <groupId>commons-lang</groupId>
+         <artifactId>commons-lang</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>log4j</groupId>
+         <artifactId>log4j</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.testng</groupId>
+         <artifactId>testng</artifactId>
+         <scope>test</scope>
+      </dependency>
+   </dependencies>
+   <!--reports (Deprecated) /-->
+   <!--reporting /-->
+   <dependencyManagement>
+      <dependencies>
+         <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.5</version>
+         </dependency>
+         <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.16</version>
+         </dependency>
+         <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>5.14.6</version>
+            <scope>test</scope>
+         </dependency>
+      </dependencies>
+   </dependencyManagement>
+   <!--distributionManagement /-->
+   <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <project.java.source>1.6</project.java.source>
+      <project.java.target>${project.java.source}</project.java.target>
+      <project.mvn.plugins.compiler.version>2.3.2</project.mvn.plugins.compiler.version>
+   </properties>
+</project>
