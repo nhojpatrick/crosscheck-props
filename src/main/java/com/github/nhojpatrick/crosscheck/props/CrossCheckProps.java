@@ -1,10 +1,27 @@
+/*
+ * Copyright (c) 2015 https://github.com/nhojpatrick
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+ * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+ * Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+ * WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+ * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package com.github.nhojpatrick.crosscheck.props;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,7 +36,7 @@ import org.apache.log4j.Logger;
 /**
  * Implementation of Cross Check Props.
  * 
- * @author john
+ * @author nhojpatrick
  */
 public class CrossCheckProps implements ICrossCheckProps {
 
@@ -38,7 +55,8 @@ public class CrossCheckProps implements ICrossCheckProps {
     /**
      * {@inheritDoc}
      */
-    public void execute() {
+    @Override
+	public void execute() {
 
         final File resourcesDir = agileGetDir();
 
@@ -47,8 +65,9 @@ public class CrossCheckProps implements ICrossCheckProps {
         LOG.debug("template resource = [" + template.toString() + "]");
         final Properties templateProperties = new Properties();
         try {
-            final Reader templateReader = new FileReader(template);
+            final Reader templateReader = new InputStreamReader(new FileInputStream(template), "UTF-8");
             templateProperties.load(templateReader);
+            templateReader.close();
 
         } catch (FileNotFoundException e) {
             LOG.error("TODO [CCP-CORE-000003]", e);
@@ -69,8 +88,9 @@ public class CrossCheckProps implements ICrossCheckProps {
 
         /* load other properties file */
         final FilenameFilter resourcesFilter = new PropertiesRegexFilter(this.propertiesRegex, this.masterTemplateName);
-        final File[] resources = resourcesDir.listFiles(resourcesFilter);
+        final File[] rawResources = resourcesDir.listFiles(resourcesFilter);
 
+        final File[] resources = rawResources != null ? rawResources : new File[] {};
         final Results results = new Results();
         for (final File resource : resources) {
             if (!resource.equals(template)) {
@@ -80,8 +100,9 @@ public class CrossCheckProps implements ICrossCheckProps {
                 final Properties resourceProperties = new Properties();
 
                 try {
-                    final Reader resourceReader = new FileReader(resource);
+                    final Reader resourceReader = new InputStreamReader(new FileInputStream(resource), "UTF-8");
                     resourceProperties.load(resourceReader);
+                    resourceReader.close();
 
                 } catch (FileNotFoundException e) {
                     LOG.error("TODO [CCP-CORE-000001]", e);
@@ -110,7 +131,9 @@ public class CrossCheckProps implements ICrossCheckProps {
                 results.resultFiles.add(resultsFile);
             }
         }
+        LOG.debug("template resource files = [" + results + "]");
 
+        
         /* missing from template */
         final Set<Object> templatePropertiesKeySetMissing = new HashSet<Object>();
         templatePropertiesKeySetMissing.addAll(allKeys);
@@ -137,7 +160,8 @@ public class CrossCheckProps implements ICrossCheckProps {
     /**
      * {@inheritDoc}
      */
-    public String getMasterTemplateName() {
+    @Override
+	public String getMasterTemplateName() {
 
         final String rtn = this.masterTemplateName;
         LOG.trace("GET [" + rtn + "]");
@@ -147,7 +171,8 @@ public class CrossCheckProps implements ICrossCheckProps {
     /**
      * {@inheritDoc}
      */
-    public String getPropertiesRegex() {
+    @Override
+	public String getPropertiesRegex() {
 
         final String rtn = this.propertiesRegex;
         LOG.trace("GET [" + rtn + "]");
@@ -157,15 +182,16 @@ public class CrossCheckProps implements ICrossCheckProps {
     /**
      * {@inheritDoc}
      */
-    public boolean setMasterTemplateName(final String pMasterTemplateName) {
+    @Override
+	public boolean setMasterTemplateName(final String pMasterTemplateName) {
 
         LOG.trace("SET [" + pMasterTemplateName + "]");
 
         boolean setMasterTemplateName = true;
 
         /* validation checks */
-        setMasterTemplateName = setMasterTemplateName && (pMasterTemplateName != null);
-        setMasterTemplateName = setMasterTemplateName && (!pMasterTemplateName.equals(""));
+        setMasterTemplateName = setMasterTemplateName && pMasterTemplateName != null;
+        setMasterTemplateName = setMasterTemplateName && !pMasterTemplateName.equals("");
 
         if (setMasterTemplateName) {
             LOG.debug("setting masterTemplateName to '" + pMasterTemplateName + "'");
@@ -179,19 +205,26 @@ public class CrossCheckProps implements ICrossCheckProps {
     /**
      * {@inheritDoc}
      */
-    public boolean setPropertiesRegex(final String pPropertiesRegex) {
+    @Override
+	public boolean setPropertiesRegex(final String pPropertiesRegex) {
 
         LOG.trace("SET [" + pPropertiesRegex + "]");
 
         boolean setPropertiesRegex = true;
 
         /* validation checks */
-        setPropertiesRegex = setPropertiesRegex && (pPropertiesRegex != null);
-        setPropertiesRegex = setPropertiesRegex && (!pPropertiesRegex.equals(""));
-        final boolean invalidRegex = (setPropertiesRegex && Pattern.compile(pPropertiesRegex) == null);
-        setPropertiesRegex = setPropertiesRegex && (!invalidRegex);
+        setPropertiesRegex = setPropertiesRegex && pPropertiesRegex != null;
+        setPropertiesRegex = setPropertiesRegex && !pPropertiesRegex.equals("");
 
-        if (invalidRegex) {
+        boolean validRegex = true;
+        try {
+            Pattern.compile(pPropertiesRegex);
+
+        } catch (NullPointerException npe) {
+            validRegex = false;
+        }
+
+        if (!validRegex) {
             LOG.debug("invalid regex for '" + pPropertiesRegex + "'");
         }
 
@@ -204,7 +237,7 @@ public class CrossCheckProps implements ICrossCheckProps {
         return setPropertiesRegex;
     }
 
-    class PropertiesRegexFilter implements FilenameFilter {
+    static class PropertiesRegexFilter implements FilenameFilter {
 
         final Pattern propertiesPattern;
 
@@ -216,7 +249,8 @@ public class CrossCheckProps implements ICrossCheckProps {
             this.templateName = pTemplateName;
         }
 
-        public boolean accept(final File pDir, final String pName) {
+        @Override
+		public boolean accept(final File pDir, final String pName) {
             LOG.debug("resources filename filter, dir [" + pDir + "], name [" + pName + "]");
             final Matcher propertiesMatcher = this.propertiesPattern.matcher(pName);
             final boolean matches = propertiesMatcher.matches();
@@ -226,19 +260,19 @@ public class CrossCheckProps implements ICrossCheckProps {
             LOG.debug("resources filename filter, dir [" + pDir + "], name [" + pName + "], template [" + isTemplate
                     + "]");
 
-            final boolean accept = (matches && !isTemplate);
+            final boolean accept = matches && !isTemplate;
             LOG.debug("resources filename filter, dir [" + pDir + "], name [" + pName + "], accept [" + accept + "]");
             return accept;
         }
 
     }
 
-    class Results {
+    static class Results {
 
         final List<ResultFile> resultFiles = new ArrayList<ResultFile>();
     }
 
-    class ResultFile {
+    static class ResultFile {
 
         final File resultFile;
 
@@ -253,6 +287,7 @@ public class CrossCheckProps implements ICrossCheckProps {
             this.resultFile = pResultFile;
         }
 
+        @Override
         public String toString() {
 
             final StringBuilder sbuf = new StringBuilder();

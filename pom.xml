@@ -1,64 +1,214 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<project
-   xmlns="http://maven.apache.org/POM/4.0.0"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
->
-   <!--parent /-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                       http://maven.apache.org/maven-v4_0_0.xsd">
+   <!--parent / -->
    <modelVersion>4.0.0</modelVersion>
    <groupId>com.github.nhojpatrick</groupId>
    <artifactId>crosscheck-props</artifactId>
    <packaging>jar</packaging>
    <name>nhojpatrick, crosscheck properties</name>
-   <version>0.1</version>
+   <version>1.0.0-SNAPSHOT</version>
    <description>nhojpatrick, crosscheck properties project.</description>
-   <url>http://wiki.github.com/nhojpatrick/${project.artifactId}/</url>
-   <!--prerequisites /-->
+   <url>https://github.com/nhojpatrick/${project.artifactId}</url>
+   <prerequisites>
+      <maven>3.3.9</maven>
+   </prerequisites>
    <issueManagement>
       <system>GITHUB</system>
-      <url>http://github.com/nhojpatrick/${project.artifactId}/issues/</url>
+      <url>http://github.com/nhojpatrick/${project.artifactId}/issues</url>
    </issueManagement>
-   <!--ciManagement /-->
+   <!--ciManagement / -->
    <inceptionYear>2010</inceptionYear>
-   <!--mailingLists /-->
+   <!--mailingLists / -->
    <developers>
       <developer>
          <id>nhojpatrick</id>
          <name>John Patrick</name>
-         <url>http://github.com/nhojpatrick/</url>
+         <email>nhoj.patrick@gmail.com</email>
+         <url>https://github.com/nhojpatrick</url>
       </developer>
    </developers>
-   <!--contributors /-->
-   <!--licenses /-->
+   <!--contributors / -->
+   <!--licenses / -->
    <scm>
       <connection>scm:git:http://github.com/nhojpatrick/${project.artifactId}.git</connection>
       <developerConnection>scm:git:git@github.com:nhojpatrick/${project.artifactId}.git</developerConnection>
       <tag>HEAD</tag>
-      <url>http://github.com/nhojpatrick/${project.artifactId}/</url>
+      <url>http://github.com/nhojpatrick/${project.artifactId}</url>
    </scm>
-   <!--organization /-->
+   <!--organization / -->
    <build>
-      <plugins>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>${project.mvn.plugins.compiler.version}</version>
-            <configuration>
-               <source>${project.java.source}</source>
-               <target>${project.java.target}</target>
-            </configuration>
-         </plugin>
-         <plugin>
-         	<groupId>org.apache.maven.plugins</groupId>
-         	<artifactId>maven-eclipse-plugin</artifactId>
-         	<version>2.7</version>
-         </plugin>
-      </plugins>
+      <pluginManagement>
+         <plugins>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-checkstyle-plugin</artifactId>
+               <version>2.17</version>
+               <configuration>
+                  <failsOnError>false</failsOnError>
+                  <failOnViolation>false</failOnViolation>
+               </configuration>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-clean-plugin</artifactId>
+               <version>3.0.0</version>
+               <configuration>
+                  <filesets>
+                     <fileset>
+                        <directory>test-output</directory>
+                        <followSymlinks>false</followSymlinks>
+                     </fileset>
+                  </filesets>
+               </configuration>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-compiler-plugin</artifactId>
+               <version>3.3</version>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-deploy-plugin</artifactId>
+               <version>2.8.2</version>
+            </plugin>
+            <plugin>
+               <!-- requires this version as 2.8+ dropped eclipse:m2eclipse -->
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-eclipse-plugin</artifactId>
+               <version>2.7</version>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-install-plugin</artifactId>
+               <version>2.5.2</version>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-jar-plugin</artifactId>
+               <version>2.6</version>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-javadoc-plugin</artifactId>
+               <version>2.10.3</version>
+               <configuration>
+                  <tags>
+                     <tag>
+                        <name>todo</name>
+                        <!-- todo tag for all places -->
+                        <placement>a</placement>
+                        <head>To do something:</head>
+                     </tag>
+                  </tags>
+               </configuration>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-jdeps-plugin</artifactId>
+               <version>3.0.0</version>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-jxr-plugin</artifactId>
+               <version>2.5</version>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-linkcheck-plugin</artifactId>
+               <version>1.2</version>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-pmd-plugin</artifactId>
+               <version>3.6</version>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-resources-plugin</artifactId>
+               <version>2.7</version>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-site-plugin</artifactId>
+               <version>3.4</version>
+            </plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-surefire-plugin</artifactId>
+               <version>2.19</version>
+            </plugin>
+            <plugin>
+               <groupId>org.codehaus.mojo</groupId>
+               <artifactId>findbugs-maven-plugin</artifactId>
+               <version>3.0.3</version>
+            </plugin>
+            <plugin>
+               <groupId>org.codehaus.mojo</groupId>
+               <artifactId>versions-maven-plugin</artifactId>
+               <version>2.2</version>
+            </plugin>
+            <plugin>
+               <groupId>org.jacoco</groupId>
+               <artifactId>jacoco-maven-plugin</artifactId>
+               <version>0.7.5.201505241946</version>
+               <executions>
+                  <execution>
+                     <id>default-prepare-agent</id>
+                     <goals>
+                        <goal>prepare-agent</goal>
+                     </goals>
+                  </execution>
+                  <execution>
+                     <id>default-report</id>
+                     <phase>site</phase>
+                     <goals>
+                        <goal>report</goal>
+                     </goals>
+                  </execution>
+                  <execution>
+                     <id>default-check</id>
+                     <goals>
+                        <goal>check</goal>
+                     </goals>
+                     <configuration>
+                        <rules>
+                           <rule>
+                              <element>BUNDLE</element>
+                              <limits>
+                                 <limit>
+                                    <counter>COMPLEXITY</counter>
+                                    <value>COVEREDRATIO</value>
+                                    <minimum>0.60</minimum>
+                                 </limit>
+                              </limits>
+                           </rule>
+                        </rules>
+                        <haltOnFailure>false</haltOnFailure>
+                     </configuration>
+                  </execution>
+               </executions>
+            </plugin>
+         </plugins>
+      </pluginManagement>
    </build>
-   <!--profiles /-->
-   <!--modules /-->
-   <!--repositories /-->
-   <!--pluginRepositories /-->
+   <profiles>
+      <profile>
+         <id>codequality</id>
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>org.jacoco</groupId>
+                  <artifactId>jacoco-maven-plugin</artifactId>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
+   </profiles>
+   <!--modules / -->
+   <!--repositories / -->
+   <!--pluginRepositories / -->
    <dependencies>
       <dependency>
          <groupId>commons-lang</groupId>
@@ -74,8 +224,69 @@
          <scope>test</scope>
       </dependency>
    </dependencies>
-   <!--reports (Deprecated) /-->
-   <!--reporting /-->
+   <!--reports / (Deprecated. Now ignored by Maven. ) -->
+   <reporting>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+            <version>2.17</version>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>2.10.3</version>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jdeps-plugin</artifactId>
+            <version>3.0.0</version>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jxr-plugin</artifactId>
+            <version>2.5</version>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-linkcheck-plugin</artifactId>
+            <version>1.2</version>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-pmd-plugin</artifactId>
+            <version>3.6</version>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-site-plugin</artifactId>
+            <version>3.4</version>
+            <configuration>
+               <locales>en</locales>
+            </configuration>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-project-info-reports-plugin</artifactId>
+            <version>2.8.1</version>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-report-plugin</artifactId>
+            <version>2.19</version>
+         </plugin>
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>findbugs-maven-plugin</artifactId>
+            <version>3.0.3</version>
+         </plugin>
+         <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.7.5.201505241946</version>
+         </plugin>
+      </plugins>
+   </reporting>
    <dependencyManagement>
       <dependencies>
          <dependency>
@@ -96,11 +307,17 @@
          </dependency>
       </dependencies>
    </dependencyManagement>
-   <!--distributionManagement /-->
+   <!--distributionManagement / -->
    <properties>
-      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <project.java.source>1.6</project.java.source>
-      <project.java.target>${project.java.source}</project.java.target>
-      <project.mvn.plugins.compiler.version>2.3.2</project.mvn.plugins.compiler.version>
+      <!-- custom properties -->
+      <project.custom.encoding>UTF-8</project.custom.encoding>
+      <project.custom.java.version>1.6</project.custom.java.version>
+      <!-- override maven properties -->
+      <maven.test.failure.ignore>false</maven.test.failure.ignore>
+      <maven.compiler.source>${project.custom.java.version}</maven.compiler.source>
+      <maven.compiler.target>${project.custom.java.version}</maven.compiler.target>
+      <project.build.sourceEncoding>${project.custom.encoding}</project.build.sourceEncoding>
+      <project.build.outputEncoding>${project.custom.encoding}</project.build.outputEncoding>
+      <project.reporting.outputEncoding>${project.custom.encoding}</project.reporting.outputEncoding>
    </properties>
 </project>
